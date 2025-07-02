@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-const ROOT_FOLDER_ID = process.env.NEXT_PUBLIC_ROOT_FOLDER_ID;
+const ROOT_FOLDER_ID = process.env.NEXT_PUBLIC_ROOT_FOLDER_ID_MANUAL;
 
 export default function Home() {
   const [currentPath, setCurrentPath] = useState([{ id: ROOT_FOLDER_ID, name: 'Central de Arquivos' }]);
