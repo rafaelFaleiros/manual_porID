@@ -2,88 +2,90 @@
 
 import { useEffect, useState } from 'react';
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-const ROOT_FOLDER_ID = process.env.NEXT_PUBLIC_ROOT_FOLDER_ID;
+const CATALOGOS_ID = process.env.NEXT_PUBLIC_CATALOGOS_FOLDER_ID;
 
 export default function Home() {
-  const [currentPath, setCurrentPath] = useState([{ id: ROOT_FOLDER_ID, name: 'Central de Arquivos' }]);
+  const [currentPath, setCurrentPath] = useState([{
+    id: CATALOGOS_ID,
+    name: 'Catálogos'
+  }]);
   const [files, setFiles] = useState([]);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    listarItens(currentPath.at(-1).id);
+    listarItens();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function listarItens(folderId) {
-    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType)`;
+  async function listarItens() {
+    const url = `/api/drive?category=catalogos`;
     const res = await fetch(url);
-    const data = await res.json();
-    setFiles(data.files);
+    const json = await res.json();
+    setFiles(json.files || []);
   }
 
   function openItem(id, name, isFolder) {
     if (isFolder) {
-      const newPath = [...currentPath, { id, name }];
-      setCurrentPath(newPath);
-      listarItens(id);
+      setCurrentPath(path => [...path, { id, name }]);
+      // ao navegar para subpasta, ainda pedimos categoria 'catalogos'
+      listarItens();
       setSearch('');
     } else {
-      window.open(`https://drive.google.com/uc?export=download&id=${id}`, '_blank');
+      window.open(
+        `https://drive.google.com/uc?export=download&id=${id}`,
+        '_blank'
+      );
     }
   }
 
-  function navegarPara(index) {
-    const newPath = currentPath.slice(0, index + 1);
-    setCurrentPath(newPath);
-    listarItens(newPath[index].id);
+  function navegarPara(idx) {
+    setCurrentPath(path => path.slice(0, idx + 1));
+    listarItens();
     setSearch('');
   }
 
   return (
-    <>
-      <header>
-        <img src="/logo.png" alt="Logo da Empresa" />
-      </header>
+    <main className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Catálogos</h1>
 
-      <main>
-        <div className="breadcrumbs" id="breadcrumbs">
-          {currentPath.map((item, index) => (
-            <span key={item.id}>
-              {index > 0 && <span>/</span>}
-              <a href="#" onClick={() => navegarPara(index)}>{item.name}</a>
-            </span>
-          ))}
-        </div>
+      <nav className="mb-4 text-sm text-blue-600">
+        {currentPath.map((item, idx) => (
+          <span key={item.id}>
+            {idx > 0 && ' / '}
+            <button onClick={() => navegarPara(idx)}>
+              {item.name}
+            </button>
+          </span>
+        ))}
+      </nav>
 
-        {currentPath.length > 1 && (
-          <div className="back-button" onClick={() => navegarPara(currentPath.length - 2)}>⬅️ Voltar</div>
-        )}
+      <input
+        type="text"
+        placeholder="Filtrar arquivos..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        className="border p-2 mb-4 w-full"
+      />
 
-        <div id="searchContainer">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Filtrar arquivos da página por nome"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-
-        <div className="grid" id="itemsGrid">
-          {files
-            .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
-            .map(item => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {files
+          .filter(f => f.name.toLowerCase().includes(search.toLowerCase()))
+          .map(f => {
+            const isFolder = f.mimeType === 'application/vnd.google-apps.folder';
+            return (
               <button
-                key={item.id}
-                className="btn-item"
-                onClick={() => openItem(item.id, item.name, item.mimeType === 'application/vnd.google-apps.folder')}
+                key={f.id}
+                onClick={() => openItem(f.id, f.name, isFolder)}
+                className="flex items-center gap-2 p-4 border rounded hover:bg-gray-50"
               >
-                <span className="icon">{item.mimeType === 'application/vnd.google-apps.folder' ? '📁' : '📄'}</span>
-                {item.name}
+                <span className="text-2xl">
+                  {isFolder ? '📁' : '📄'}
+                </span>
+                {f.name}
               </button>
-          ))}
-        </div>
-      </main>
-    </>
+            );
+          })}
+      </div>
+    </main>
   );
 }
