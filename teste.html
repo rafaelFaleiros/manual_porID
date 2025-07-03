@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Separado</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Paleta de cores customizada */
+    :root {
+      --cor-primaria: #4b79aa;
+      --cor-secundaria: #04394E;
+    }
+  </style>
+</head>
+<body class="bg-[var(--cor-secundaria)] text-white min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <header class="bg-[var(--cor-primaria)] py-4 shadow-md">
+    <div class="container mx-auto flex items-center justify-center">
+      <img src="/logo.png" alt="Logo da Empresa" class="h-12" />
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="flex-grow flex flex-col items-center justify-center px-4">
+    <h1 class="text-3xl font-semibold mb-8">Informe o número de série do equipamento</h1>
+
+    <form class="w-full max-w-sm flex flex-col gap-4">
+      <!-- Input -->
+      <input
+        type="text"
+        id="serial"
+        placeholder="Digite o número de série"
+        class="w-full h-14 px-4 rounded-xl border-2 border-white bg-transparent text-white text-lg placeholder-white placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-white transition"
+      />
+
+      <!-- Botão -->
+      <button
+        type="submit"
+        class="w-full h-14 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium flex items-center justify-center transition"
+      >
+        Enviar
+      </button>
+    </form>
+  </main>
+
+  <!-- Rodapé (opcional) -->
+  <footer class="bg-[var(--cor-primaria)] py-2 text-center">
+    <p class="text-sm">&copy; 2025 Sua Empresa. Todos os direitos reservados.</p>
+  </footer>
+</body>
+</html>

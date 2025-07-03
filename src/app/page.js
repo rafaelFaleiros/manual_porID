@@ -12,97 +12,58 @@ export default function Home() {
     setError('');
     setLoading(true);
 
-    try {
-      const res = await fetch(`/api/manual/${encodeURIComponent(serial)}`);
-      const json = await res.json();
-      
-      if (!res.ok) {
-        setError(json.error || 'Serial inválido ou não encontrado.');
-        setLoading(false);
-        return;
-      }
-      
-      window.location.href = json.downloadUrl;
-    } catch (err) {
-      setError('Ocorreu um erro ao conectar ao servidor.');
-    } finally {
-      setLoading(false);
+    const res = await fetch(`/api/manual/${encodeURIComponent(serial)}`);
+    const json = await res.json();
+    setLoading(false);
+
+    if (!res.ok) {
+      setError(json.error || 'Serial inválido');
+      return;
     }
+    window.location.href = json.downloadUrl;
   }
 
   return (
     <>
       {/* Navbar */}
-      <header className="bg-[#4b79aa] py-4 shadow-md">
-        <img
-          src="/logo.png"
-          alt="Logo da Empresa"
-          className="h-12 mx-auto"
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = 'https://placehold.co/200x50/4b79aa/FFFFFF?text=Logo';
-          }}
-        />
+      <header className="bg-[var(--cor-primaria)] py-4 shadow-md">
+        <div className="container mx-auto flex items-center justify-center">
+          <img src="/logo.png" alt="Logo da Empresa" className="h-12" />
+        </div>
       </header>
 
-      {/* Conteúdo */}
-      <main className="flex flex-col items-center justify-start min-h-screen bg-[#04394E] px-4 pt-20">
-        <h2 className="text-white text-2xl font-semibold mb-8 text-center">
+      {/* Conteúdo principal */}
+      <main className="flex-grow flex flex-col items-center justify-center bg-[var(--cor-secundaria)] text-white min-h-screen px-4 pt-16">
+        <h1 className="text-3xl font-semibold mb-8">
           Informe o número de série do equipamento
-        </h2>
+        </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-xs flex flex-col gap-4"
-        >
-          {/* Input estilizado */}
+        <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col gap-4">
           <input
             type="text"
             value={serial}
-            onChange={(e) =>
-              setSerial(e.target.value.trim().toUpperCase())
-            }
+            onChange={e => setSerial(e.target.value.trim().toUpperCase())}
             placeholder="Digite o número de série"
             required
-            className="
-              w-full h-14 px-4 
-              rounded-xl 
-              border-2 border-white 
-              bg-transparent 
-              text-white text-lg 
-              placeholder-white placeholder-opacity-70 
-              focus:outline-none focus:ring-2 focus:ring-white 
-              transition duration-200
-            "
+            className="w-full h-14 px-4 rounded-xl border-2 border-white bg-transparent text-white text-lg placeholder-white placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-white transition"
           />
 
-          {/* Botão com o mesmo estilo e tamanho do input */}
           <button
             type="submit"
             disabled={loading}
-            className="
-              w-full h-14 px-4 
-              rounded-xl 
-              bg-[#5A7FCF] 
-              text-white text-lg font-medium 
-              flex items-center justify-center 
-              shadow-lg 
-              hover:bg-[#4B79AA] hover:-translate-y-0.5 
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5A7FCF] focus:ring-offset-[#04394E]
-              transition-all duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
-            "
+            className="w-full h-14 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-lg font-medium flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Verificando…' : 'Enviar'}
+            {loading ? 'Processando…' : 'Enviar'}
           </button>
 
-          {error && (
-            <p className="text-red-400 text-sm text-center mt-1">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-red-300 text-center text-sm">{error}</p>}
         </form>
       </main>
+
+      {/* Footer opcional */}
+      <footer className="bg-[var(--cor-primaria)] py-2 text-center">
+        <p className="text-sm">&copy; 2025 Sua Empresa. Todos os direitos reservados.</p>
+      </footer>
     </>
   );
 }
