@@ -49,9 +49,9 @@ export default function Home() {
             }
             placeholder="Digite o número de série"
             required
-            className="
+            className=" 
               w-full h-14 px-4
-              rounded-xl
+              rounded-x5
               border-2 border-white
               bg-transparent
               text-white text-lg

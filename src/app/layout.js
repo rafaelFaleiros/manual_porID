@@ -11,7 +11,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata = { 
   title: "Busca de Manuais Técnicos",
   description: "Central de Busca de Manuais Técnicos - Betta Hidroturbinas",
 };
