@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function Home() {
   const [serial, setSerial] = useState('');
-  const [error, setError]   = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -12,66 +12,79 @@ export default function Home() {
     setError('');
     setLoading(true);
 
-    const res = await fetch(`/api/manual/${encodeURIComponent(serial)}`);
-    const json = await res.json();
-    setLoading(false);
+    try {
+      const res = await fetch(`/api/manual/${encodeURIComponent(serial)}`);
+      const json = await res.json();
+      setLoading(false);
 
-    if (!res.ok) {
-      setError(json.error || 'Serial inválido');
-      return;
+      if (!res.ok) {
+        throw new Error(json.error || 'Serial inválido');
+      }
+      window.location.href = json.downloadUrl;
+    } catch (err) {
+      setError(err.message);
     }
-
-    window.location.href = json.downloadUrl;
   }
 
   return (
-    <main className="min-h-screen flex flex-col">
-      {/* Navbar */}
-      <header className="bg-blue-800 text-white py-4 shadow-md">
-        <div className="container mx-auto flex items-center justify-center">
-          <img src="/logo.png" alt="Logo da Empresa" className="h-10 mr-4" />
-          <h1 className="text-xl font-semibold">Central de Manuais</h1>
-        </div>
+    <>
+      <header className="bg-[#4b79aa] py-4 shadow-md">
+        <img src="/logo.png" alt="Logo da Empresa" className="h-10 mx-auto" />
       </header>
 
-      {/* Content */}
-      <section className="flex-grow flex items-center justify-center bg-blue-50">
-        <div className="bg-white rounded-2xl shadow-lg p-10 max-w-lg w-full mx-4">
-          <h2 className="text-2xl font-bold mb-6 text-center text-blue-800">
-            DIGITE O NÚMERO DE SÉRIE DO SEU EQUIPAMENTO
-          </h2>
+      <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-900 to-teal-700 px-4">
+        <div className="bg-white bg-opacity-10 backdrop-blur-xl rounded-3xl p-10 max-w-sm w-full shadow-2xl">
+          <h1 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
+            DIGITE O NÚMERO DE SÉRIE
+          </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            {/* Input com estilo profissional */}
             <input
               type="text"
               value={serial}
-              onChange={e => setSerial(e.target.value.trim().toUpperCase())}
-              placeholder="Ex: ABC123"
+              onChange={e => setSerial(e.target.value.toUpperCase())}
+              placeholder="Ex: ABC123456"
               required
-              className="w-full px-4 py-3 border-2 border-blue-200 rounded-lg focus:border-blue-500 focus:outline-none"
+              className="
+                w-full
+                h-14
+                px-5
+                rounded-2xl
+                bg-white bg-opacity-20
+                placeholder-white placeholder-opacity-70
+                text-white text-lg
+                focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50
+                transition
+              "
             />
 
+            {/* Botão com cor da navbar e sombra suave */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-blue-800 text-white font-semibold rounded-lg hover:bg-blue-900 disabled:opacity-50 transition"
+              className="
+                w-full
+                h-14
+                flex items-center justify-center
+                bg-[#4b79aa]
+                text-white text-lg font-semibold
+                rounded-2xl
+                shadow-xl
+                hover:bg-[#3a6588]
+                disabled:opacity-50 disabled:cursor-not-allowed
+                transition ease-in-out duration-200
+              "
             >
-              {loading ? 'Verificando...' : 'Baixar Manual'}
+              {loading ? 'Verificando…' : 'Baixar Manual'}
             </button>
 
             {error && (
-              <p className="text-red-600 text-sm text-center mt-2">{error}</p>
+              <p className="text-red-300 text-center mt-2">{error}</p>
             )}
           </form>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-100 py-4">
-        <div className="container mx-auto text-center text-gray-600">
-          © {new Date().getFullYear()} Betta Hidroturbinas. Todos os direitos reservados.
-        </div>
-      </footer>
-    </main>
+      </main>
+    </>
   );
 }
