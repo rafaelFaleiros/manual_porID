@@ -62,12 +62,6 @@ export default function HomePage() {
           )}
         </form>
       </main>
-
-      <footer className="footer">
-        <p className="footer__text">
-          &copy; {new Date().getFullYear()} Sua Empresa. Todos os direitos reservados.
-        </p>
-      </footer>
     </>
   );
 }
