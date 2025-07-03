@@ -109,3 +109,36 @@ input::-webkit-inner-spin-button {
 ::placeholder {
   opacity: 0.7;
 }
+
+
+/* Custom Card Button */
+.custom-card {
+  --card-width: 100%;
+  --card-height: 3.5rem;
+  --card-padding: 0.75rem;
+
+  background-color: rgb(90, 127, 207);   /* #5A7FCF */
+  border-radius: 8px;
+  width: var(--card-width);
+  max-width: 100%;
+  height: var(--card-height);
+  padding: var(--card-padding);
+  text-align: center;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-card:hover {
+  background-color: rgb(75, 121, 170);   /* #4B79AA */
+  transform: translateY(-2px);
+}
+
+.custom-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
