@@ -52,14 +52,14 @@ main {
 #searchContainer {
   margin-bottom: 1rem;
 }
-#searchInput {
+/* #searchInput {
   width: 100%;
   max-width: 400px;
   padding: 8px;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
-}
+} */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
