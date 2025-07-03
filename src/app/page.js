@@ -56,7 +56,6 @@ export default function Home() {
               bg-transparent
               text-white text-lg
               placeholder-white placeholder-opacity-50
-              focus:outline-none focus:ring-2 focus:ring-white
               transition
             "
           />
