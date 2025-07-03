@@ -61,16 +61,19 @@ export default function Home() {
             "
           />
 
-          {/* Botão com design de card */}
+          {/* Botão estilizado */}
           <button
             type="submit"
             disabled={loading}
-            className="custom-card text-lg font-medium flex items-center justify-center"
-            style={{
-              '--card-width': '100%',
-              '--card-height': '3.5rem',
-              '--card-padding': '0'
-            }}
+            className="
+              w-full h-14 px-4
+              rounded-xl
+              bg-blue-600 hover:bg-blue-700
+              text-white text-lg font-medium
+              flex items-center justify-center
+              transition
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
           >
             {loading ? 'Verificando…' : 'Enviar'}
           </button>
