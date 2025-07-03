@@ -34,7 +34,7 @@ export default function HomePage() {
 
       <main className="main-content">
         <h1 className="main-content__title">
-          Informe o número de série do equipamento
+          Informe o Número de Série do Equipamento
         </h1>
 
         <form onSubmit={handleSubmit} className="form-container">
