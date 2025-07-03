@@ -2,32 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Seus estilos personalizados */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #04394E;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-}
-
-header {
-  background-color: #4b79aa;
-  width: 100%;
-}
-
-main {
+/* Custom Card Button */
+.custom-card {
+  background-color: rgb(75, 121, 170);
+  border-radius: 8px;
+  width: var(--card-width);
+  max-width: 100%;
+  height: var(--card-height);
+  padding: var(--card-padding);
   text-align: center;
+  color: white;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.custom-card:hover {
+  background-color: rgb(65, 101, 150);
+  transform: scale(1.02);
 }
 
-/* remove estilos padrão do input number */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+/* Override Autofill Background/Text Color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #04394E inset !important;
+  -webkit-text-fill-color: #fff !important;
 }
 
-/* placeholder mais suave */
-::placeholder {
-  opacity: 0.7;
+/* Box-sizing global */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
