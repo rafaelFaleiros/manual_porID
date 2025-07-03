@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import './globals.css';
 
-export default function Home() {
+export default function HomePage() {
   const [serial, setSerial] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,49 +26,48 @@ export default function Home() {
 
   return (
     <>
-      {/* Navbar */}
-      <header className="bg-[#4b79aa] py-4 shadow-md">
-        <img src="/logo.png" alt="Logo da Empresa" className="h-12 mx-auto" />
+      <header className="navbar">
+        <div className="navbar__container">
+          <img src="/logo.png" alt="Logo da Empresa" className="navbar__logo" />
+        </div>
       </header>
 
-      {/* Conteúdo */}
-      <main className="flex flex-col items-center justify-start min-h-screen bg-[#04394E] px-4 pt-20">
-        <h2 className="text-white text-2xl font-semibold mb-8">
+      <main className="main-content">
+        <h1 className="main-content__title">
           Informe o número de série do equipamento
-        </h2>
+        </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-xs flex flex-col gap-4"
-        >
-          {/* Input estilizado */}
+        <form onSubmit={handleSubmit} className="form-container">
           <input
             type="text"
             value={serial}
-            onChange={(e) =>
-              setSerial(e.target.value.trim().toUpperCase())
-            }
+            onChange={e => setSerial(e.target.value.trim().toUpperCase())}
             placeholder="Digite o número de série"
             required
-            className="h-14 px-4 border-2 border-white rounded-lg bg-transparent text-white text-base placeholder-white/60 focus:outline-none"
+            className="form-container__input"
           />
 
-          {/* Botão estilizado */}
           <button
             type="submit"
             disabled={loading}
-            className="h-14 rounded-lg bg-[#5A7FCF] text-white text-base font-medium cursor-pointer transition-colors duration-200 hover:bg-[#4b79aa] disabled:opacity-60 disabled:cursor-not-allowed"
+            className="form-container__button"
           >
             {loading ? 'Verificando…' : 'Enviar'}
           </button>
 
           {error && (
-            <p className="text-red-400 text-sm text-center mt-1">
+            <p className="form-container__error">
               {error}
             </p>
           )}
         </form>
       </main>
+
+      <footer className="footer">
+        <p className="footer__text">
+          &copy; {new Date().getFullYear()} Sua Empresa. Todos os direitos reservados.
+        </p>
+      </footer>
     </>
   );
 }
