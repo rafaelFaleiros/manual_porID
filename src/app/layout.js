@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Central de Arquivos",
-  description: "Central de Arquivos Betta Hidroturbinas",
+  title: "Busca de Manuais Técnicos",
+  description: "Central de Busca de Manuais Técnicos - Betta Hidroturbinas",
 };
 
 export default function RootLayout({ children }) {

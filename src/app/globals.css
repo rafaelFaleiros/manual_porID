@@ -97,3 +97,15 @@ main {
   cursor: pointer;
   color: #fff;
 }
+
+/* remove estilos padrão do input number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* placeholder mais suave */
+::placeholder {
+  opacity: 0.7;
+}

@@ -12,7 +12,6 @@ export default function Home() {
     setError('');
     setLoading(true);
 
-    // Chama a API dinâmica /api/manual/[serial]
     const res = await fetch(`/api/manual/${encodeURIComponent(serial)}`);
     const json = await res.json();
     setLoading(false);
@@ -22,37 +21,45 @@ export default function Home() {
       return;
     }
 
-    // Redireciona para o link de download
     window.location.href = json.downloadUrl;
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          DIGITE SEU NÚMERO DE SÉRIE
-        </h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="text"
-            value={serial}
-            onChange={e => setSerial(e.target.value.trim().toUpperCase())}
-            placeholder="Por exemplo: ABC123"
-            required
-            className="border rounded p-2"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-600 text-white rounded p-2 hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? 'Verificando...' : 'Baixar Manual'}
-          </button>
-          {error && (
-            <p className="text-red-500 text-sm text-center">{error}</p>
-          )}
-        </form>
-      </div>
-    </main>
+    <>
+      <header className="bg-gradient-to-r from-blue-700 to-teal-500 p-6">
+        <img src="/logo.png" alt="Logo da Empresa" className="h-12 mx-auto" />
+      </header>
+
+      <main className="flex flex-col items-center justify-center min-h-screen bg-blue-900 text-white px-4">
+        <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-8 max-w-md w-full">
+          <h1 className="text-3xl font-semibold text-center mb-6">
+            DIGITE O NÚMERO DE SÉRIE
+          </h1>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              value={serial}
+              onChange={e => setSerial(e.target.value.trim().toUpperCase())}
+              placeholder="Ex: ABC123"
+              required
+              className="w-full p-3 rounded-lg bg-white bg-opacity-20 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-300"
+            />
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-teal-400 rounded-lg font-medium hover:bg-teal-500 disabled:opacity-50 transition"
+            >
+              {loading ? 'Verificando...' : 'Baixar Manual'}
+            </button>
+
+            {error && (
+              <p className="text-red-300 text-sm text-center">{error}</p>
+            )}
+          </form>
+        </div>
+      </main>
+    </>
   );
 }
