@@ -1,89 +1,58 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-const ROOT_FOLDER_ID = process.env.NEXT_PUBLIC_ROOT_FOLDER_ID_MANUAL;
+import { useState } from 'react';
 
 export default function Home() {
-  const [currentPath, setCurrentPath] = useState([{ id: ROOT_FOLDER_ID, name: 'Central de Arquivos' }]);
-  const [files, setFiles] = useState([]);
-  const [search, setSearch] = useState('');
+  const [serial, setSerial] = useState('');
+  const [error, setError]   = useState('');
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    listarItens(currentPath.at(-1).id);
-  }, []);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-  async function listarItens(folderId) {
-    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType)`;
-    const res = await fetch(url);
-    const data = await res.json();
-    setFiles(data.files);
-  }
+    // Chama a API dinâmica /api/manual/[serial]
+    const res = await fetch(`/api/manual/${encodeURIComponent(serial)}`);
+    const json = await res.json();
+    setLoading(false);
 
-  function openItem(id, name, isFolder) {
-    if (isFolder) {
-      const newPath = [...currentPath, { id, name }];
-      setCurrentPath(newPath);
-      listarItens(id);
-      setSearch('');
-    } else {
-      window.open(`https://drive.google.com/uc?export=download&id=${id}`, '_blank');
+    if (!res.ok) {
+      setError(json.error || 'Serial inválido');
+      return;
     }
-  }
 
-  function navegarPara(index) {
-    const newPath = currentPath.slice(0, index + 1);
-    setCurrentPath(newPath);
-    listarItens(newPath[index].id);
-    setSearch('');
+    // Redireciona para o link de download
+    window.location.href = json.downloadUrl;
   }
 
   return (
-    <>
-      <header>
-        <img src="/logo.png" alt="Logo da Empresa" />
-      </header>
-
-      <main>
-        <div className="breadcrumbs" id="breadcrumbs">
-          {currentPath.map((item, index) => (
-            <span key={item.id}>
-              {index > 0 && <span>/</span>}
-              <a href="#" onClick={() => navegarPara(index)}>{item.name}</a>
-            </span>
-          ))}
-        </div>
-
-        {currentPath.length > 1 && (
-          <div className="back-button" onClick={() => navegarPara(currentPath.length - 2)}>⬅️ Voltar</div>
-        )}
-
-        <div id="searchContainer">
+    <main className="min-h-screen flex flex-col items-center justify-center p-6">
+      <div className="w-full max-w-sm">
+        <h1 className="text-2xl font-bold mb-4 text-center">
+          DIGITE SEU NÚMERO DE SÉRIE
+        </h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
-            id="searchInput"
-            placeholder="Filtrar arquivos da página por nome"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={serial}
+            onChange={e => setSerial(e.target.value.trim().toUpperCase())}
+            placeholder="Por exemplo: ABC123"
+            required
+            className="border rounded p-2"
           />
-        </div>
-
-        <div className="grid" id="itemsGrid">
-          {files
-            .filter(item => item.name.toLowerCase().includes(search.toLowerCase()))
-            .map(item => (
-              <button
-                key={item.id}
-                className="btn-item"
-                onClick={() => openItem(item.id, item.name, item.mimeType === 'application/vnd.google-apps.folder')}
-              >
-                <span className="icon">{item.mimeType === 'application/vnd.google-apps.folder' ? '📁' : '📄'}</span>
-                {item.name}
-              </button>
-          ))}
-        </div>
-      </main>
-    </>
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-600 text-white rounded p-2 hover:bg-blue-700 disabled:opacity-50"
+          >
+            {loading ? 'Verificando...' : 'Baixar Manual'}
+          </button>
+          {error && (
+            <p className="text-red-500 text-sm text-center">{error}</p>
+          )}
+        </form>
+      </div>
+    </main>
   );
 }
