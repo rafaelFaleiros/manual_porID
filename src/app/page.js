@@ -49,18 +49,14 @@ export default function Home() {
             }
             placeholder="Digite o número de série"
             required
-            className=" 
-            
-            "
+            className="h-14 px-4 border-2 border-white rounded-lg bg-transparent text-white text-base placeholder-white/60 focus:outline-none"
           />
 
           {/* Botão estilizado */}
           <button
             type="submit"
             disabled={loading}
-            className="
-          
-            "
+            className="h-14 rounded-lg bg-[#5A7FCF] text-white text-base font-medium cursor-pointer transition-colors duration-200 hover:bg-[#4b79aa] disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {loading ? 'Verificando…' : 'Enviar'}
           </button>
