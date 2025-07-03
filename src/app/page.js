@@ -50,13 +50,7 @@ export default function Home() {
             placeholder="Digite o número de série"
             required
             className=" 
-              w-full h-14 px-4
-              rounded-x5
-              border-2 border-white
-              bg-transparent
-              text-white text-lg
-              placeholder-white placeholder-opacity-50
-              transition
+            
             "
           />
 
@@ -65,13 +59,7 @@ export default function Home() {
             type="submit"
             disabled={loading}
             className="
-              w-full h-14 px-4
-              rounded-xl
-              bg-blue-600 hover:bg-blue-700
-              text-white text-lg font-medium
-              flex items-center justify-center
-              transition
-              disabled:opacity-50 disabled:cursor-not-allowed
+          
             "
           >
             {loading ? 'Verificando…' : 'Enviar'}
